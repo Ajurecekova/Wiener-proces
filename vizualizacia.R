@@ -1,9 +1,20 @@
-x = c(0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)
-y = c(0,0.305572,1.69525,-0.040287,-0.06498,-0.448223,-0.639258, 0.0639048,-0.28164,-0.480231)
-plot(x,y)
-
-y2=c(0,0.0284114,0.345689,0.6183,2.2415,2.52498,0.973975,1.23016,2.20612,2.76883)
-plot(x, y, type = "b", pch = 19, 
-     col = "red", xlab = "x", ylab = "y")
-
+library(tidyverse)
 datatable <- read.table("Trajectories.dsv",sep='|',header=TRUE)
+
+conditions<-as.factor(datatable$color)
+ggplot(data =datatable,aes(x=aes_x,y=value,group=aes_y, color = conditions))+
+  geom_line()+
+  labs(title = "n=10000", group= "conditions")+
+  ylab("value")+
+  xlab("time")
+
+
+W1 <- subset(datatable,aes_x==0.01)
+W2 <- subset(datatable,aes_x==0.02)
+color<- W1$color
+W1<-W1$value
+W2<-W2$value
+conditions<-as.factor(color)
+df<-data.frame(W1,W2,color)
+ggplot(data=df, aes(x = W1, y = W2, color = conditions))+
+  geom_point()
